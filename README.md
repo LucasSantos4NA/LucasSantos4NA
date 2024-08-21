@@ -81,3 +81,7 @@ node app.js
 ```
 
 Certifique-se de ter o Node.js instalado para executar o código TypeScript compilado.
+
+
+
+Autor: Lucas Vieira
