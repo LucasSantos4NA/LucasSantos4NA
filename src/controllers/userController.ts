@@ -1,13 +1,14 @@
 import { Request, Response } from 'express';
-import { UserService } from '../services/userService';
+import { UserRepository } from '../repositories/userRepository';
+import { isValidEmail } from '../helpers/validationHelper';
 
-const userService = new UserService();
+const userRepository = new UserRepository();
 
 export const getUsers = async (req: Request, res: Response) => {
   try {
-    const users = await userService.listUsers();
+    const users = await userRepository.getAllUsers();
     res.status(200).json(users);
-  } catch (err: unknown) {
+  } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Erro ao buscar usuários' });
   }
@@ -16,16 +17,16 @@ export const getUsers = async (req: Request, res: Response) => {
 export const addUser = async (req: Request, res: Response) => {
   const { name, email } = req.body;
 
-  // Validação simples
-  if (!name || !email) {
-    return res.status(400).json({ error: 'Nome e email são obrigatórios' });
+  // Validando o e-mail com o helper
+  if (!isValidEmail(email)) {
+    return res.status(400).json({ error: 'Email inválido' });
   }
 
   try {
-    const user = await userService.createUser(name, email);
+    const user = await userRepository.addUser(name, email);
     res.status(201).json(user);
-  } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : 'Erro ao criar usuário';
-    res.status(400).json({ error: message });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Erro ao adicionar usuário' });
   }
 };
