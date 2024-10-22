@@ -8,6 +8,6 @@ export const isValidName = (name: string): boolean => {
   return name.length >= 3 && nameRegex.test(name);
 };
 
-export function isCapitalized(name: string): boolean {
+export const isCapitalized = (name: string): boolean => {
   return name.length > 0 && name[0] === name[0].toUpperCase();
-}
+};

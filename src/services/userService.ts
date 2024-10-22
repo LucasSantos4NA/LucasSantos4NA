@@ -1,5 +1,9 @@
-import { isValidEmail, isValidName, isCapitalized } from "../helpers/validationHelper";
-import { UserRepository } from "../repositories/userRepository"; 
+import { UserRepository } from "../repositories/userRepository";
+import {
+  isValidEmail,
+  isValidName,
+  isCapitalized,
+} from "../helpers/validationHelper";
 
 export class UserService {
   private userRepository: UserRepository;
@@ -10,15 +14,17 @@ export class UserService {
 
   async createUser(name: string, email: string) {
     if (!isValidName(name)) {
-      throw new Error("Nome inválido");
+      throw new Error(
+        "O nome deve conter pelo menos 3 caracteres e apenas letras",
+      );
     }
     if (!isCapitalized(name)) {
-      throw new Error("O nome deve começar com letra maiúscula");
+      throw new Error("O nome deve começar com uma letra maiúscula");
     }
     if (!isValidEmail(email)) {
       throw new Error("Email inválido");
     }
-    return await this.userRepository.addUser(name, email);
+    return await this.userRepository.addUserWithoutPassword(name, email);
   }
 
   async listUsers() {
